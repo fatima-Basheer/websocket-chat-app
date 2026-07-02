@@ -21,10 +21,11 @@ A simple WebSocket chat application built with **Node.js**, **Express**, and the
 
 ```
 .
-├── server.js
-├── package.json
 ├── client/
 │   └── index.html
+├── server/
+│   ├── index.js
+│   └── package.json
 └── README.md
 ```
 
