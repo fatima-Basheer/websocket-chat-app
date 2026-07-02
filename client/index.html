@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Client</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;     
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  #log {
+    list-style: none;
+    padding: 0;
+  }
+
+  #log li {
+    margin: 5px 0;
+  }
+
+  .heading {
+    font-size: 30px;
+  }
+</style>
+</head>
+
+<body>
+
+  <h2 class="heading">WebSocket</h2>
+   
+<div >
+    <input id="msg" placeholder="Type message..." />
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+  <ul id="log"></ul>
+
+  <script>
+    // Connect to server
+    const ws = new WebSocket("ws://localhost:8000");
+
+    const log = document.getElementById("log");
+
+    // Connection opened
+    ws.onopen = () => {
+      add("Connected to server");
+      ws.send("Hello server");
+    };
+
+    // Message from server
+    ws.onmessage = (event) => {
+      add("Server: " + event.data);
+    };
+
+    // Connection closed
+    ws.onclose = () => {
+      add("Disconnected");
+    };
+
+    // Error
+    ws.onerror = () => {
+      add("WebSocket error occurred!");
+    };
+
+    // Send message
+    function sendMessage() {
+      const input = document.getElementById("msg");
+
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(input.value);
+        add("You: " + input.value);
+      } else {
+        add("Socket not connected yet!");
+      }
+
+      input.value = "";
+    }
+
+    // UI helper
+    function add(message) {
+      const li = document.createElement("li");
+      li.textContent = message;
+      log.appendChild(li);
+    }
+  </script>
+
+</body>
+</html>
